@@ -1,0 +1,52 @@
+train_dataset:
+  dataset:
+    name: image-folder
+    args:
+        root_path: ../../data/SRNO/S2
+        repeat: 20
+  wrapper:
+    name: sr-implicit-downsampled-fast
+    args:
+      inp_size: 100
+      scale_max: 3
+      augment: true
+  batch_size: 40
+
+val_dataset:
+  dataset:
+    name: image-folder
+    args:
+        root_path: ../../data/SRNO/S2
+  wrapper:
+      name: sr-implicit-downsampled-fast
+      args:
+        scale_min: 3
+        scale_max: 3
+  batch_size: 1
+eval_type: benchmark-4
+eval_bsize: 500
+
+
+
+model:
+  name: sronet
+  args:
+    encoder_spec:
+      name: edsr-baseline
+      args:
+        no_upsampling: true
+    width: 256
+    blocks: 16
+
+optimizer:
+  name: adam
+  args:
+    lr: 4.e-5
+epoch_max: 150
+warmup_step_lr:
+  multiplier: 10
+  total_epoch: 50
+
+epoch_val: 20
+epoch_save: 20
+
